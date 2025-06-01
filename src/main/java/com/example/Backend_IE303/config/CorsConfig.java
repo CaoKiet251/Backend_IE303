@@ -16,6 +16,7 @@ public class CorsConfig {
 
         // Cho phép frontend truy cập
         config.addAllowedOrigin("http://localhost:5173");
+        config.addAllowedOrigin("https://frontend-ie-303.vercel.app");
 
         // Cho phép các phương thức HTTP
         config.addAllowedMethod("*");
