@@ -35,7 +35,7 @@ public class BillController {
         return billService.getNumberOfBills();
     }
 
-    @GetMapping("/")
+    @GetMapping
     public List<BillDTO> getAllBillsList() {
         return billService.getAllBillsList();
     }
