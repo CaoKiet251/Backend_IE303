@@ -1,6 +1,7 @@
 package com.example.Backend_IE303.controller;
 
 import com.example.Backend_IE303.dto.EmployeeShiftDTO;
+import com.example.Backend_IE303.dto.EmployeeDTO;
 import com.example.Backend_IE303.service.EmployeeShiftService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -8,6 +9,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -63,4 +65,31 @@ public class EmployeeShiftController {
         List<EmployeeShiftDTO> shifts = employeeShiftService.getEmployeeWeeklyShifts(employeeId, date);
         return ResponseEntity.ok(shifts);
     }
+
+    @GetMapping("/employees/day")
+    public ResponseEntity<List<EmployeeDTO>> getEmployeesOfDay(
+            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime date) {
+        List<EmployeeDTO> employees = employeeShiftService.getEmployeesOfDay(date);
+        return ResponseEntity.ok(employees);
+    }
+
+    @PostMapping("/{id}")
+    public ResponseEntity<EmployeeShiftDTO> setTime(
+            @PathVariable Integer id,
+            @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime time_in,
+            @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime time_out) {
+
+        EmployeeShiftDTO dto;
+
+        if (time_in != null) {
+            dto = employeeShiftService.setTime_in(id, time_in);
+        } else if (time_out != null) {
+            dto = employeeShiftService.setTime_out(id, time_out);
+        } else {
+            return ResponseEntity.badRequest().build();
+        }
+
+        return ResponseEntity.ok(dto);
+    }
+
 }

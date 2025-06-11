@@ -27,4 +27,8 @@ public class EmployeeShift {
     @Column(nullable = false)
     private String shiftType; // e.g., "MORNING", "AFTERNOON", "NIGHT"
 
+    private LocalDateTime time_in;
+
+    private LocalDateTime time_out;
+
 }
