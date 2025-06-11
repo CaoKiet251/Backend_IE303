@@ -14,4 +14,6 @@ public class EmployeeShiftDTO {
     private Integer employeeId;
     private LocalDateTime date;
     private String shiftType;
+    private LocalDateTime time_in;
+    private LocalDateTime time_out;
 }

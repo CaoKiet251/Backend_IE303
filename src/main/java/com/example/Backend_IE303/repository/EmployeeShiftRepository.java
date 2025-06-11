@@ -10,6 +10,8 @@ import java.util.List;
 @Repository
 public interface EmployeeShiftRepository extends JpaRepository<EmployeeShift, Integer> {
     List<EmployeeShift> findByEmployeeId(Integer employeeId);
+    
+    List<EmployeeShift> findByDate(LocalDateTime date);
 
     List<EmployeeShift> findByDateBetween(LocalDateTime startDate, LocalDateTime endDate);
 
