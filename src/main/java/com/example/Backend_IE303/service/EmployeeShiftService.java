@@ -1,5 +1,6 @@
 package com.example.Backend_IE303.service;
 
+import com.example.Backend_IE303.dto.EmployeeDTO;
 import com.example.Backend_IE303.dto.EmployeeShiftDTO;
 import com.example.Backend_IE303.entity.Employee;
 import com.example.Backend_IE303.entity.EmployeeShift;
@@ -11,6 +12,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.time.temporal.TemporalAdjusters;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -93,12 +95,39 @@ public class EmployeeShiftService {
                 .collect(Collectors.toList());
     }
 
+    public List<EmployeeDTO> getEmployeesOfDay(LocalDateTime date) {
+        List<EmployeeShift> shifts = employeeShiftRepository.findByDate(date);
+        List<EmployeeDTO> employees = new ArrayList<>();
+        for (EmployeeShift shift : shifts) {
+            Employee employee = shift.getEmployee();
+            EmployeeDTO employeeDTO = new EmployeeDTO(employee);
+            employees.add(employeeDTO);
+        }
+        return employees;
+    }
+
     private EmployeeShiftDTO convertToDTO(EmployeeShift shift) {
         EmployeeShiftDTO dto = new EmployeeShiftDTO();
         dto.setId(shift.getId());
         dto.setEmployeeId(shift.getEmployee().getId());
         dto.setDate(shift.getDate());
         dto.setShiftType(shift.getShiftType());
+        dto.setTime_in(shift.getTime_in());
+        dto.setTime_out(shift.getTime_out());
         return dto;
+    }
+
+    public EmployeeShiftDTO setTime_in( Integer shiftId, LocalDateTime time_in) {
+        EmployeeShift shift = employeeShiftRepository.findById(shiftId).orElseThrow(() -> new ResourceNotFoundException("Shift not found"));
+        shift.setTime_in(time_in);
+        employeeShiftRepository.save(shift);
+        return convertToDTO(shift);
+    }
+
+    public EmployeeShiftDTO setTime_out( Integer shiftId, LocalDateTime time_out) {
+        EmployeeShift shift = employeeShiftRepository.findById(shiftId).orElseThrow(() -> new ResourceNotFoundException("Shift not found"));
+        shift.setTime_out(time_out);
+        employeeShiftRepository.save(shift);
+        return convertToDTO(shift);
     }
 }
